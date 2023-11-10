@@ -21,6 +21,7 @@ export class UserService {
     const user = await this.userRepository.findOne({
       where: { userId: userId },
     });
+    if (!user) return false;
     return user;
   }
 

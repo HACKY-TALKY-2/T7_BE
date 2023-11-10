@@ -30,8 +30,9 @@ export class AuthService {
   async loginUser(loginDto: LoginDto) {
     const { userId, password } = loginDto;
     const user = await this.userService.findUserByUserId(userId);
+    if (!user) throw new UnauthorizedException();
     const validatePassword = await bcrypt.compare(password, user.password);
-    if (!user || !validatePassword) {
+    if (!validatePassword) {
       throw new UnauthorizedException();
     }
     return user;

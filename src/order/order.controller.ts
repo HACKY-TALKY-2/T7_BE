@@ -6,6 +6,7 @@ import {
   Req,
   Res,
   UseGuards,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
@@ -34,7 +35,11 @@ export class OrderController {
       await this.orderService.order(id, orderDtos);
       return res.sendStatus(200);
     } catch (err) {
-      return res.send(err);
+      if (err instanceof UnauthorizedException) {
+        return res.sendStatus(401);
+      }
+
+      return res.sendStatus(500);
     }
   }
 

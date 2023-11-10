@@ -1,4 +1,10 @@
-import { Controller, Post, Body, Res } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Res,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { UserService } from 'src/user/user.service';
@@ -13,14 +19,22 @@ export class AuthController {
 
   @Post('/login')
   async login(@Body() loginDto: LoginDto, @Res() res: Response) {
-    const user = await this.authService.loginUser(loginDto);
-    const isAdmin = user.userId == 'admin';
-    const token = await this.authService.getAccessToken(user.id, isAdmin);
+    try {
+      const user = await this.authService.loginUser(loginDto);
+      const isAdmin = user.userId == 'admin';
+      const token = await this.authService.getAccessToken(user.id, isAdmin);
 
-    return res.json({
-      token: token,
-      isAdmin: isAdmin,
-    });
+      return res.json({
+        token: token,
+        isAdmin: isAdmin,
+      });
+    } catch (err) {
+      if (err instanceof UnauthorizedException) {
+        return res.sendStatus(401);
+      }
+
+      return res.sendStatus(500);
+    }
   }
 
   @Post('/signup')
@@ -34,7 +48,11 @@ export class AuthController {
     try {
       await this.userService.signupUser(signupDto);
     } catch (err) {
-      return res.send(err);
+      if (err instanceof UnauthorizedException) {
+        return res.sendStatus(401);
+      }
+
+      return res.sendStatus(500);
     }
     return res.sendStatus(201);
   }
