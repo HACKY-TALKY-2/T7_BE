@@ -44,27 +44,27 @@ export class OrderService {
 
   async orderQueue() {
     const orders = await this.orderRepository.find({
-      where: { isFinished: true },
+      where: { isFinished: false },
+      relations: ['user'],
     });
 
     const result = await Promise.all(
       orders.map(async (order) => {
         const orderMenuItems = await this.orderMenuRepository.find({
           where: { order: order },
+          relations: ['menu'],
         });
         const orderMenuDtos = await Promise.all(
           orderMenuItems.map(async (orderMenu): Promise<OrderMenuDto> => {
+            console.log(orderMenu.menu as MenuEntity);
             return await OrderMenuDto.ToDto(orderMenu.menu, orderMenu.count);
           }),
         );
-        OrderListDto.ToDto(order, orderMenuDtos);
+        console.log(orderMenuDtos);
+        return OrderListDto.ToDto(order, orderMenuDtos);
       }),
     );
-
+    console.log(result);
     return result;
-  }
-
-  async getMenuInfo(menuId: number) {
-    return await this.menuRepository.findOne({ where: { id: menuId } });
   }
 }
