@@ -14,7 +14,6 @@ export class AuthService {
   ) {}
 
   async getAccessToken(id: number, isAdmin: boolean) {
-    console.log(isAdmin);
     const payload: JwtPayload = {
       id: id,
       signedAt: new Date().toISOString(),
