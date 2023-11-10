@@ -3,20 +3,17 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  ManyToOne,
 } from 'typeorm';
+import { UserEntity } from './users.entity';
 
 @Entity()
 export class OrderEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    type: String,
-  })
-  nickname: string;
-
-  @Column()
-  cost: number;
+  @ManyToOne(() => UserEntity)
+  user: UserEntity;
 
   @Column({
     type: Boolean,
