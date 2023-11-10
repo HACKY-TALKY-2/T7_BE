@@ -7,6 +7,7 @@ export class UserEntity {
 
   @Column({
     type: String,
+    unique: true,
   })
   userId: string;
 

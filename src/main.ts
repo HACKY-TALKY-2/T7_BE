@@ -6,8 +6,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('HACKY TOCKY API')
-    .setDescription('API for HACKY-TOKCY service')
+    .setTitle('HACKY TALKY API')
+    .setDescription('API for HACKY-TALKY service')
     .setVersion('1.0')
     .build();
 
