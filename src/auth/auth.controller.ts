@@ -22,6 +22,7 @@ export class AuthController {
 
     return res.json({
       token: token,
+      isAdmin: isAdmin,
     });
   }
 

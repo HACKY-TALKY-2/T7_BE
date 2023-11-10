@@ -56,15 +56,12 @@ export class OrderService {
         });
         const orderMenuDtos = await Promise.all(
           orderMenuItems.map(async (orderMenu): Promise<OrderMenuDto> => {
-            console.log(orderMenu.menu as MenuEntity);
             return await OrderMenuDto.ToDto(orderMenu.menu, orderMenu.count);
           }),
         );
-        console.log(orderMenuDtos);
         return OrderListDto.ToDto(order, orderMenuDtos);
       }),
     );
-    console.log(result);
     return result;
   }
 }
