@@ -15,10 +15,7 @@ export class AuthController {
   async login(@Body() loginDto: LoginDto, @Res() res: Response) {
     const user = await this.authService.loginUser(loginDto);
     const isAdmin = user.userId == 'admin';
-    const token = await this.authService.getAccessToken({
-      id: user.id,
-      isAdmin: isAdmin,
-    });
+    const token = await this.authService.getAccessToken(user.id, isAdmin);
 
     return res.json({
       token: token,
