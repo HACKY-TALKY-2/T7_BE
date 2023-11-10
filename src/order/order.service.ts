@@ -13,4 +13,10 @@ export class OrderService {
     @InjectRepository(MenuEntity)
     private readonly menuRepository: Repository<MenuEntity>,
   ) {}
+
+  getMenu() {
+    const menuEntity = this.menuRepository.create({ name: "hi", price: 10, image: "htae"});
+    return this.menuRepository.save(menuEntity);
+    // return this.menuRepository.find();
+  }
 }
